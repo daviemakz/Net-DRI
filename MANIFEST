@@ -100,6 +100,7 @@ lib/Net/DRI/DRD/Deloitte.pm
 lib/Net/DRI/DRD/DENIC.pm
 lib/Net/DRI/DRD/DK.pm
 lib/Net/DRI/DRD/DONUTS.pm
+lib/Net/DRI/DRD/EC.pm
 lib/Net/DRI/DRD/ES.pm
 lib/Net/DRI/DRD/EURid.pm
 lib/Net/DRI/DRD/Gandi.pm
@@ -152,6 +153,7 @@ lib/Net/DRI/DRD/TCI_gTLD.pm
 lib/Net/DRI/DRD/Telnic.pm
 lib/Net/DRI/DRD/TMDB.pm
 lib/Net/DRI/DRD/TRAVEL.pm
+lib/Net/DRI/DRD/UA.pm
 lib/Net/DRI/DRD/UNIREG.pm
 lib/Net/DRI/DRD/UNITEDTLD.pm
 lib/Net/DRI/DRD/UPU.pm
@@ -427,6 +429,9 @@ lib/Net/DRI/Protocol/EPP/Extensions/TCI_gTLD.pm
 lib/Net/DRI/Protocol/EPP/Extensions/TCI_gTLD/Contact.pm
 lib/Net/DRI/Protocol/EPP/Extensions/TCI_gTLD/Domain.pm
 lib/Net/DRI/Protocol/EPP/Extensions/Telnic.pm
+lib/Net/DRI/Protocol/EPP/Extensions/UA.pm
+lib/Net/DRI/Protocol/EPP/Extensions/UA/Domain.pm
+lib/Net/DRI/Protocol/EPP/Extensions/UA/HostDelete.pm
 lib/Net/DRI/Protocol/EPP/Extensions/UNIREG.pm
 lib/Net/DRI/Protocol/EPP/Extensions/UNIREG/Centric.pm
 lib/Net/DRI/Protocol/EPP/Extensions/UNIREG/Market.pm
@@ -709,6 +714,7 @@ t/Net/DRI/Protocol/EPP/Extensions/DK.t
 t/Net/DRI/Protocol/EPP/Extensions/DNSBE.t
 t/Net/DRI/Protocol/EPP/Extensions/E164.t
 t/Net/DRI/Protocol/EPP/Extensions/E164Validation.t
+t/Net/DRI/Protocol/EPP/Extensions/EC.t
 t/Net/DRI/Protocol/EPP/Extensions/ES.pm
 t/Net/DRI/Protocol/EPP/Extensions/EURid.t
 t/Net/DRI/Protocol/EPP/Extensions/FCCN.t
@@ -718,6 +724,7 @@ t/Net/DRI/Protocol/EPP/Extensions/ICMRegistry.t
 t/Net/DRI/Protocol/EPP/Extensions/IDN.t
 t/Net/DRI/Protocol/EPP/Extensions/IT.pm
 t/Net/DRI/Protocol/EPP/Extensions/KeyRelay.t
+t/Net/DRI/Protocol/EPP/Extensions/KNET.t
 t/Net/DRI/Protocol/EPP/Extensions/LaunchPhase.t
 t/Net/DRI/Protocol/EPP/Extensions/LU.t
 t/Net/DRI/Protocol/EPP/Extensions/LV.t
@@ -751,6 +758,7 @@ t/Net/DRI/Protocol/EPP/Extensions/SWITCH.t
 t/Net/DRI/Protocol/EPP/Extensions/Tango.t
 t/Net/DRI/Protocol/EPP/Extensions/TCI_gTLD.t
 t/Net/DRI/Protocol/EPP/Extensions/Telnic.t
+t/Net/DRI/Protocol/EPP/Extensions/UA.t
 t/Net/DRI/Protocol/EPP/Extensions/UniReg.t
 t/Net/DRI/Protocol/EPP/Extensions/UNIREG/Market.t
 t/Net/DRI/Protocol/EPP/Extensions/UnitedTLD.t
