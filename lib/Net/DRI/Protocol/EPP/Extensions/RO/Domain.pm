@@ -78,8 +78,8 @@ sub register_commands {
 		trade_query =>          [ \&trade_query, \&trade_query_parse],
 		transfer_request =>     [ \&transfer_request, undef],
 		update =>               [ \&update, undef],
-		renew =>                [ \&renew, undef],
-		info =>                 [ \&info, undef],
+		renew =>                [ \&renew, \&renew_parse],
+		info =>                 [ \&info, \&info_parse],
 		check =>                [ \&check, \&check_parse]
 	);
 
@@ -292,11 +292,86 @@ sub renew {
 	return;
 }
 
+sub renew_parse {
+ my ($po,$otype,$oaction,$oname,$rinfo)=@_;
+ my $mes=$po->message();
+ return unless $mes->is_success();
+
+ my $rendata=$mes->get_response('ro_domain','renData');
+ return unless defined $rendata;
+
+ foreach my $el (Net::DRI::Util::xml_list_children($rendata)) {
+  my ($name,$c)=@$el;
+  if ($name eq 'name') {
+   $oname=lc($c->textContent());
+   $rinfo->{domain}->{$oname}->{action}='renew';
+   $rinfo->{domain}->{$oname}->{exist}=1;
+  } elsif ($name=~m/^(exDate)$/) {
+   $rinfo->{domain}->{$oname}->{$1}=$po->parse_iso8601($c->textContent()) if ($c->textContent());
+  }
+ }
+ return;
+}
+
 sub info {
 	my ($epp,$domain,$rd)=@_;
 	my $mes=$epp->message();
 	$mes->command(['info','domain:info',sprintf('xmlns:domain="%s" xsi:schemaLocation="%s %s"',$mes->nsattrs('ro_domain'))]);
 	return;
+}
+
+sub info_parse {
+ my ($po,$otype,$oaction,$oname,$rinfo)=@_;
+ my $mes=$po->message();
+ return unless $mes->is_success();
+
+ my $infdata=$mes->get_response('ro_domain','infData');
+ return unless defined $infdata;
+
+ my (@s,@host);
+ my $cs=$po->create_local_object('contactset');
+ my %ccache;
+
+ foreach my $el (Net::DRI::Util::xml_list_children($infdata)) {
+  my ($name,$c)=@$el;
+  if ($name eq 'name') {
+   $oname=lc($c->textContent());
+   $rinfo->{domain}->{$oname}->{action}='info';
+   $rinfo->{domain}->{$oname}->{exist}=1;
+  } elsif ($name eq 'roid') {
+   $rinfo->{domain}->{$oname}->{roid}=$c->textContent();
+  } elsif ($name eq 'status') {
+   push @s,Net::DRI::Protocol::EPP::Util::parse_node_status($c);
+  } elsif ($name eq 'registrant') {
+   my $id=$c->textContent();
+   $ccache{$id}=$po->create_local_object('contact')->srid($id) unless exists $ccache{$id};
+   $cs->set($ccache{$id},'registrant');
+  } elsif ($name eq 'contact') {
+   my $id=$c->textContent();
+   $ccache{$id}=$po->create_local_object('contact')->srid($id) unless exists $ccache{$id};
+   $cs->add($ccache{$id},$c->getAttribute('type'));
+  } elsif ($name eq 'ns') {
+   if ($po->{hostasns} == 1) {
+    $rinfo->{domain}->{$oname}->{ns} = $po->create_local_object('hosts') unless defined ($rinfo->{domain}->{$oname}->{ns});
+    $rinfo->{domain}->{$oname}->{ns}->add($c->textContent());
+   } else {
+    $rinfo->{domain}->{$oname}->{ns}=Net::DRI::Protocol::EPP::Util::parse_ns($po,$c);
+   }
+  } elsif ($name eq 'host') {
+   push @host,$c->textContent();
+  } elsif ($name=~m/^(clID|crID|upID)$/) {
+   $rinfo->{domain}->{$oname}->{$1}=$c->textContent();
+  } elsif ($name=~m/^(crDate|upDate|trDate|exDate)$/) {
+   $rinfo->{domain}->{$oname}->{$1}=$po->parse_iso8601($c->textContent()) if ($c->textContent());
+  } elsif ($name eq 'authInfo') {
+   $rinfo->{domain}->{$oname}->{auth}={pw => Net::DRI::Util::xml_child_content($c,$mes->ns('domain'),'pw')};
+  }
+ }
+
+ $rinfo->{domain}->{$oname}->{contact}=$cs;
+ $rinfo->{domain}->{$oname}->{status}=$po->create_local_object('status')->add(@s);
+ $rinfo->{domain}->{$oname}->{subordinate_hosts}=$po->create_local_object('hosts')->set(@host) if @host;
+ return;
 }
 
 sub check {
