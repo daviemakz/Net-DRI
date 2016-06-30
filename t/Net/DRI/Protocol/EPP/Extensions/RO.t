@@ -9,7 +9,7 @@ use DateTime;
 use DateTime::Duration;
 use utf8;
 
-use Test::More tests => 54;
+use Test::More tests => 56;
 
 eval { no warnings; require Test::LongString; Test::LongString->import(max => 100); $Test::LongString::Context=50; };
 if ( $@ ) { no strict 'refs'; *{'main::is_string'}=\&main::is; }
@@ -89,6 +89,8 @@ $reserve_domain = {'reserve' => '0'};
 $rc=$dri->domain_create('xn--test-gbdppjee--ohb5qsnr6odb.ro',{domain_terms=>$domain_terms,reserve_domain=>$reserve_domain,pure_create=>1,duration=>DateTime::Duration->new(years=>1),contact=>$cs,ns=>$dh,auth=>{pw=>'Parol@1'}});
 is($R1,$E1.'<command><create><domain:create xmlns:domain="http://www.rotld.ro/xml/epp/domain-1.0" xsi:schemaLocation="http://www.rotld.ro/xml/epp/domain-1.0 domain-1.0.xsd"><domain:name>xn--test-gbdppjee--ohb5qsnr6odb.ro</domain:name><domain:period unit="y">1</domain:period><domain:ns><domain:hostAttr><domain:hostName>xn--0la.xn--n-oxa.xn--fda.xn--test-gbdppjee--ohb5qsnr6odb.ro</domain:hostName><domain:hostAddr ip="v4">192.0.2.2</domain:hostAddr><domain:hostAddr ip="v6">1080:0:0:0:8:800:200C:417A</domain:hostAddr></domain:hostAttr></domain:ns><domain:registrant>C1192942</domain:registrant><domain:contact type="tech"/><domain:authInfo><domain:pw>Parol@1</domain:pw></domain:authInfo></domain:create></create><extension><rotld:ext xmlns:rotld="http://www.rotld.ro/xml/epp/rotld-1.0"><rotld:create><rotld:domain><rotld:agreement legal_use="yes" registration_rules="yes"/></rotld:domain></rotld:create></rotld:ext></extension><clTRID>ABC-12345</clTRID></command>'.$E2,'domain_create ns & terms & idn build_xml');
 is($rc->is_success(),1,'domain_create ns & terms & idn is_success');
+is($dri->get_info('ace'),'xn--test-gbdppjee--ohb5qsnr6odb.ro','domain_create_extension idn get_info(ace)');
+is($dri->get_info('unicode'),'test-gbdppjee-ăîșțâ.ro','domain_create_extension idn get_info(unicode)');
 
 ### 1.2 Domain Trade Start (Obtaining an Authorization Key)
 $R2=$E1.'<response>'.r().'<resData><domain:trdData xmlns:domain="http://www.rotld.ro/xml/epp/domain-1.0" xsi:schemaLocation="http://www.rotld.ro/xml/epp/domain-1.0 domain-1.0.xsd"><domain:name>test-ia8gq5cs.ro</domain:name><domain:trStatus /><domain:reID/><domain:reDate>2013-07-26T00:00:00Z</domain:reDate><domain:acID/><domain:acDate/><domain:exDate>2013-08-09T00:00:00Z</domain:exDate></domain:trdData></resData><extension><rotld:ext xmlns:rotld="http://www.rotld.ro/xml/epp/rotld-1.0"><rotld:trdData><rotld:domain><rotld:request><rotld:authorization_key>2f4MmCXsrRHE</rotld:authorization_key></rotld:request></rotld:domain></rotld:trdData></rotld:ext></extension>'.$TRID.'</response>'.$E2;
