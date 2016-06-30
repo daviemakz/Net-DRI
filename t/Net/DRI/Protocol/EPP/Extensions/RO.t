@@ -9,7 +9,7 @@ use DateTime;
 use DateTime::Duration;
 use utf8;
 
-use Test::More tests => 56;
+use Test::More tests => 60;
 
 eval { no warnings; require Test::LongString; Test::LongString->import(max => 100); $Test::LongString::Context=50; };
 if ( $@ ) { no strict 'refs'; *{'main::is_string'}=\&main::is; }
@@ -143,7 +143,7 @@ $rc=$dri->domain_update('test-6lijl3yd.ro',$toc);
 is_string($R1,$E1.'<command><update><domain:update xmlns:domain="http://www.rotld.ro/xml/epp/domain-1.0" xsi:schemaLocation="http://www.rotld.ro/xml/epp/domain-1.0 domain-1.0.xsd"><domain:name>test-6lijl3yd.ro</domain:name><domain:add><domain:ns><domain:hostAttr><domain:hostName>a.ns.1.test-4oakyw-3.ro</domain:hostName><domain:hostAddr ip="v4">192.0.2.2</domain:hostAddr><domain:hostAddr ip="v6">1080:0:0:0:8:800:200C:417A</domain:hostAddr></domain:hostAttr><domain:hostAttr><domain:hostName>ns1.update-example.net</domain:hostName></domain:hostAttr><domain:hostAttr><domain:hostName>a.ns.1.test-6lijl3yd.ro</domain:hostName><domain:hostAddr ip="v4">192.168.16.131</domain:hostAddr></domain:hostAttr><domain:hostAttr><domain:hostName>a.ns.1.update.test-6lijl3yd.ro</domain:hostName><domain:hostAddr ip="v4">192.168.166.131</domain:hostAddr></domain:hostAttr></domain:ns></domain:add></domain:update></update><extension><rotld:ext xmlns:rotld="http://www.rotld.ro/xml/epp/rotld-1.0"><rotld:update><rotld:domain><rotld:activate/></rotld:domain></rotld:update></rotld:ext></extension><clTRID>ABC-12345</clTRID></command>'.$E2,'domain_update add_hosts + activation build_xml');
 # Test below disabled as registry supports both object & host_as_attr. Set "$self->{info}->{host_as_attr}=0;" before running this test and disable the one above it.
 #is_string($R1,$E1.'<command><update><domain:update xmlns:domain="http://www.rotld.ro/xml/epp/domain-1.0" xsi:schemaLocation="http://www.rotld.ro/xml/epp/domain-1.0 domain-1.0.xsd"><domain:name>test-6lijl3yd.ro</domain:name><domain:add><domain:ns><domain:hostObj>a.ns.1.test-4oakyw-3.ro</domain:hostObj><domain:hostObj>ns1.update-example.net</domain:hostObj><domain:hostObj>a.ns.1.test-6lijl3yd.ro</domain:hostObj><domain:hostObj>a.ns.1.update.test-6lijl3yd.ro</domain:hostObj></domain:ns></domain:add></domain:update></update><extension><rotld:ext xmlns:rotld="http://www.rotld.ro/xml/epp/rotld-1.0"><rotld:update><rotld:domain><rotld:activate/></rotld:domain></rotld:update></rotld:ext></extension><clTRID>ABC-12345</clTRID></command>'.$E2,'domain_update add_hosts + activation object_method build_xml');
-is($rc->is_success(), 1, 'domain_update add_hosts + activation is success');
+is($rc->is_success(), 1, 'domain_update add_hosts + activation is_success');
 
 ### 1.8 Domain Renew
 $R2=$E1.'<response>'.r().'<resData><domain:renData xmlns:domain="http://www.rotld.ro/xml/epp/domain-1.0" xsi:schemaLocation="http://www.rotld.ro/xml/epp/domain-1.0 domain-1.0.xsd"><domain:name>test-5btc8khh-6.ro</domain:name><domain:exDate>2014-08-11T15:43:26Z</domain:exDate></domain:renData></resData>'.$TRID.'</response>'.$E2;
@@ -151,7 +151,7 @@ my $du = DateTime::Duration->new(years => 1);
 my $exp = DateTime->new(year => 2015,month => 05,day => 01);
 $rc = $dri->domain_renew('test-5btc8khh-6.ro',{duration=>$du,current_expiration=>$exp} );
 is_string($R1,$E1.'<command><renew><domain:renew xmlns:domain="http://www.rotld.ro/xml/epp/domain-1.0" xsi:schemaLocation="http://www.rotld.ro/xml/epp/domain-1.0 domain-1.0.xsd"><domain:name>test-5btc8khh-6.ro</domain:name><domain:curExpDate>2015-05-01</domain:curExpDate><domain:period unit="y">1</domain:period></domain:renew></renew><clTRID>ABC-12345</clTRID></command>'.$E2,'domain_renew build_xml');
-is($rc->is_success(), 1, 'domain_renew is success');
+is($rc->is_success(), 1, 'domain_renew is_success');
 is($dri->get_info('name'),'test-5btc8khh-6.ro','domain_renew get_info(name)');
 is($dri->get_info('action'),'renew','domain_renew get_info(action)');
 is($dri->get_info('exist'),1,'domain_renew get_info(exist)');
@@ -161,7 +161,7 @@ is($dri->get_info('exDate'),'2014-08-11T15:43:26','domain_renew get_info(exDate)
 $R2=$E1.'<response>'.r().'<resData><domain:infData xmlns:domain="http://www.rotld.ro/xml/epp/domain-1.0" xsi:schemaLocation="http://www.rotld.ro/xml/epp/domain-1.0 domain-1.0.xsd"><domain:name>test-5btc8khh-7.ro</domain:name><domain:roid>test-5btc8khh-7-ROTLD</domain:roid><domain:status s="ok" /><domain:registrant>C676211</domain:registrant><domain:ns /><domain:host>nu.exista.com</domain:host><domain:host>ns.1.test-08-iunie-2.ro</domain:host><domain:host>ns.2.test-08-iunie-2.ro</domain:host><domain:clID /><domain:crID>C676211</domain:crID><domain:crDate>2012-08-04T08:38:16Z</domain:crDate><domain:exDate>2013-08-05T08:38:16Z</domain:exDate><domain:upID /><domain:upDate>2012-08-09T12:58:56Z</domain:upDate></domain:infData></resData>'.$TRID.'</response>'.$E2;
 $rc = $dri->domain_info('test-5btc8khh-7.ro');
 is_string($R1,$E1.'<command><info><domain:info xmlns:domain="http://www.rotld.ro/xml/epp/domain-1.0" xsi:schemaLocation="http://www.rotld.ro/xml/epp/domain-1.0 domain-1.0.xsd"><domain:name hosts="all">test-5btc8khh-7.ro</domain:name></domain:info></info><clTRID>ABC-12345</clTRID></command>'.$E2,'domain_info build_xml');
-is($rc->is_success(), 1, 'domain_info is success');
+is($rc->is_success(), 1, 'domain_info is_success');
 is($dri->get_info('exist'),1,'domain_info get_info(exist)');
 is($dri->get_info('name'),'test-5btc8khh-7.ro','domain_info get_info(name)');
 is($dri->get_info('roid'),'test-5btc8khh-7-ROTLD','domain_info get_info(roid)');
@@ -170,21 +170,29 @@ is($dri->get_info('crDate'),'2012-08-04T08:38:16','domain_info get_info(crDate)'
 is($dri->get_info('exDate'),'2013-08-05T08:38:16','domain_info get_info(exDate)');
 is($dri->get_info('upDate'),'2012-08-09T12:58:56','domain_info get_info(upDate)');
 
-### 2.0 Domain Check with IDN
+### 2.0 Domain Info /w IDN
+$R2=$E1.'<response>'.r().'<resData><domain:infData xmlns:domain="http://www.rotld.ro/xml/epp/domain-1.0" xsi:schemaLocation="http://www.rotld.ro/xml/epp/domain-1.0 domain-1.0.xsd"><domain:name>xn--test-gbdppjee--ohb5qsnr6odb.ro</domain:name><domain:roid>xn--test-gbdppjee--ohb5qsnr6odb-ROTLD</domain:roid><domain:status s="ok" /><domain:registrant>C1034067</domain:registrant><domain:ns><domain:hostObj>ns2.updated.nameserver.co.uk</domain:hostObj></domain:ns><domain:clID /><domain:crID>C1034067</domain:crID><domain:crDate>2016-06-30T09:06:46Z</domain:crDate><domain:exDate /><domain:upID /><domain:upDate>2016-06-30T09:06:49Z</domain:upDate></domain:infData></resData><extension><idn:mapping xmlns:idn="http://www.rotld.ro/xml/epp/idn-1.0" xsi:schemaLocation="http://www.rotld.ro/xml/epp/idn-1.0 idn-1.0.xsd"><idn:name><idn:ace>xn--test-gbdppjee--ohb5qsnr6odb.ro</idn:ace><idn:unicode>test-gbdppjee-ăîșțâ.ro</idn:unicode></idn:name></idn:mapping></extension>'.$TRID.'</response>'.$E2;
+$rc = $dri->domain_info('xn--test-gbdppjee--ohb5qsnr6odb.ro');
+is_string($R1,$E1.'<command><info><domain:info xmlns:domain="http://www.rotld.ro/xml/epp/domain-1.0" xsi:schemaLocation="http://www.rotld.ro/xml/epp/domain-1.0 domain-1.0.xsd"><domain:name hosts="all">xn--test-gbdppjee--ohb5qsnr6odb.ro</domain:name></domain:info></info><clTRID>ABC-12345</clTRID></command>'.$E2,'domain_info idn build_xml');
+is($rc->is_success(), 1, 'domain_info idn is_success');
+is($dri->get_info('ace'),'xn--test-gbdppjee--ohb5qsnr6odb.ro','domain_info_extension idn get_info(ace)');
+is($dri->get_info('unicode'),'test-gbdppjee-ăîșțâ.ro','domain_info_extension idn get_info(unicode)');
+
+### 2.1 Domain Check /w IDN
 $R2=$E1.'<response>'.r().'<resData><domain:chkData xmlns:domain="http://www.rotld.ro/xml/epp/domain-1.0" xsi:schemaLocation="http://www.rotld.ro/xml/epp/domain-1.0 domain-1.0.xsd"><domain:cd><domain:name avail="0">test-a8r7bs6j-ăîșțâ.ro</domain:name><domain:reason>Not Available</domain:reason></domain:cd></domain:chkData></resData><extension><idn:mapping xmlns:idn="http://www.rotld.ro/xml/epp/idn-1.0" xsi:schemaLocation="http://www.rotld.ro/xml/epp/idn-1.0 idn-1.0.xsd"><idn:name><idn:ace>xn--test-a8r7bs6j--ohb5qsnr6odb.ro</idn:ace><idn:unicode>test-a8r7bs6j-ăîșțâ.ro</idn:unicode></idn:name></idn:mapping><rotld:ext xmlns:rotld="http://www.rotld.ro/xml/epp/rotld-1.0"><rotld:check_renew_availability renewable="0"><rotld:reason>OPERATION NOT SUPPORTED FOR YOUR REGISTRAR TYPE</rotld:reason></rotld:check_renew_availability></rotld:ext></extension>'.$TRID.'</response>'.$E2;
 $rc = $dri->domain_check('xn--test-9gxjiy7m--ohb5qsnr6odb.ro');
 is_string($R1,$E1.'<command><check><domain:check xmlns:domain="http://www.rotld.ro/xml/epp/domain-1.0" xsi:schemaLocation="http://www.rotld.ro/xml/epp/domain-1.0 domain-1.0.xsd"><domain:name>xn--test-9gxjiy7m--ohb5qsnr6odb.ro</domain:name></domain:check></check><clTRID>ABC-12345</clTRID></command>'.$E2,'domain_check idn build_xml');
+is($rc->is_success(), 1, 'domain_check idn is_success');
 is($dri->get_info('ace'),'xn--test-a8r7bs6j--ohb5qsnr6odb.ro','domain_check_extension idn get_info(ace)');
 is($dri->get_info('unicode'),'test-a8r7bs6j-ăîșțâ.ro','domain_check_extension idn get_info(unicode)');
 is_deeply($dri->get_info('renew_availability'),{ renewable => '0', reason => 'OPERATION NOT SUPPORTED FOR YOUR REGISTRAR TYPE'},'domain_check_extension idn get_info(renew_availability) structure');
-is($rc->is_success(), 1, 'domain_check idn is success');
 
-### 2.0 Domain Check
+### 2.2 Domain Check
 $R2=$E1.'<response>'.r().'<resData><domain:chkData xmlns:domain="http://www.rotld.ro/xml/epp/domain-1.0" xsi:schemaLocation="http://www.rotld.ro/xml/epp/domain-1.0 domain-1.0.xsd"><domain:cd><domain:name avail="1">romatime.ro</domain:name></domain:cd></domain:chkData></resData><extension><idn:mapping xmlns:idn="http://www.rotld.ro/xml/epp/idn-1.0" xsi:schemaLocation="http://www.rotld.ro/xml/epp/idn-1.0 idn-1.0.xsd" /><rotld:ext xmlns:rotld="http://www.rotld.ro/xml/epp/rotld-1.0"><rotld:check_renew_availability renewable="0"><rotld:reason>OPERATION NOT SUPPORTED FOR YOUR REGISTRAR TYPE</rotld:reason></rotld:check_renew_availability></rotld:ext></extension>'.$TRID.'</response>'.$E2;
 $rc = $dri->domain_check('romatime.ro');
 is_string($R1,$E1.'<command><check><domain:check xmlns:domain="http://www.rotld.ro/xml/epp/domain-1.0" xsi:schemaLocation="http://www.rotld.ro/xml/epp/domain-1.0 domain-1.0.xsd"><domain:name>romatime.ro</domain:name></domain:check></check><clTRID>ABC-12345</clTRID></command>'.$E2,'domain_check dna build_xml');
+is($rc->is_success(), 1, 'domain_check dna is_success');
 is_deeply($dri->get_info('renew_availability'),{ renewable => '0', reason => 'OPERATION NOT SUPPORTED FOR YOUR REGISTRAR TYPE'},'domain_check_extension dna get_info(renew_availability) structure');
-is($rc->is_success(), 1, 'domain_check dna is success');
 
 ####################################################################################################
 ####### Host Commands [No extensions or change from EPP 1.0] ########
@@ -193,7 +201,7 @@ is($rc->is_success(), 1, 'domain_check dna is success');
 #$R2='';
 #$rc=$dri->host_create($dri->local_object('hosts')->add('ns.1.test-t4s3zmg.ro',['1.2.3.4'],['2a03:5e80:0:4::133e']));
 #is_string($R1,$E1.'<command><create><host:create xmlns:host="urn:ietf:params:xml:ns:host-1.0" xsi:schemaLocation="urn:ietf:params:xml:ns:host-1.0 host-1.0.xsd"><host:name>ns.1.test-t4s3zmg.ro</host:name><host:addr ip="v4">1.2.3.4</host:addr><host:addr ip="v6">2a03:5e80:0:4::133e</host:addr></host:create></create><clTRID>ABC-12345</clTRID></command>'.$E2,'host_create build_xml');
-#is($rc->is_success(), 1, 'host_create is success');
+#is($rc->is_success(), 1, 'host_create is_success');
 
 ####################################################################################################
 ####### Contact Commands ########

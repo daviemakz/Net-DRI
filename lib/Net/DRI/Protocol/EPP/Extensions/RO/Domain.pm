@@ -368,6 +368,24 @@ sub info_parse {
  $rinfo->{domain}->{$oname}->{contact}=$cs;
  $rinfo->{domain}->{$oname}->{status}=$po->create_local_object('status')->add(@s);
  $rinfo->{domain}->{$oname}->{subordinate_hosts}=$po->create_local_object('hosts')->set(@host) if @host;
+
+ my $idndata=$mes->get_extension('ro_idn_ext','mapping');
+ return unless defined $idndata;
+
+ my $ns=$mes->ns('ro_idn_ext');
+ $idndata=$idndata->getChildrenByTagNameNS($ns,'name');
+ return unless $idndata->size();
+
+ my $c=$idndata->shift->getFirstChild();
+ while($c) {
+	 next unless ($c->nodeType() == 1); # element nodes ONLY
+	 my $name=$c->localname() || $c->nodeName();
+	 next unless $name && $c->getFirstChild();
+	 if ($name=~m/^(ace|unicode)$/) {
+		 $rinfo->{domain}->{$oname}->{$name}=$c->getFirstChild()->getData() if (defined $c);
+	 }
+ } continue { $c=$c->getNextSibling(); }
+
  return;
 }
 
