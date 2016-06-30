@@ -102,9 +102,6 @@ sub create {
 	Net::DRI::Exception::usererr_invalid_parameters('auth-pw supplied must have no spaces; one capital, small & special character with length between 6-40')
 		unless ($rd->{auth}->{pw}=~ m/^[a-z0-9\-\.\,\:\;\[\]\{\}\_\+\=\@\#\$\^\*\?\!\|\~]{6,40}$/i);
 
-	# Domain Contact Validation
-	#validate_contacts($rd);
-
 	push @f,['rotld:agreement',{legal_use => $rd->{'domain_terms'}->{'legal_use'}, registration_rules => $rd->{'domain_terms'}->{'reg_rules'}}];
 	if ($rd->{'reserve_domain'}->{'reserve'} == 1) {push @f,['rotld:reserve'];}
 
@@ -429,17 +426,6 @@ sub check_parse {
 			} continue { $c=$c->getNextSibling(); }
 			$rinfo->{domain}->{$oname}->{renew_availability} = $msg;
 		}
-	}
-	return;
-}
-
-sub validate_contacts {
-	my $rd=shift;
-	my $cont=$rd->{contact}->types();
-	foreach my $t (qw/registrant/) {
-		my $cont=$rd->{contact}->get($t);
-		Net::DRI::Exception::usererr_invalid_parameters('"srid" for registrant is set to "AUTO". Contact must be created before domain is registered.') if ($cont->{'srid'} =~ m/^(AUTO)/i);
-		Net::DRI::Exception::usererr_invalid_parameters('invalid registrant contact "srid". Must begin with "C" then 1-12 numbers.') unless ($cont->{'srid'} =~ m/^(C)([0-9]){1,12}/i);
 	}
 	return;
 }
