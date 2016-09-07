@@ -26,7 +26,9 @@ use DateTime::Duration;
 use Net::DRI::Exception;
 use Net::DRI::Data::Contact::RO;
 
-__PACKAGE__->make_exception_for_unavailable_operations(qw/domain_delete host_update host_current_status host_check host_exist host_delete host_create host_info contact_delete contact_transfer contact_transfer_stop contact_transfer_query contact_transfer_accept contact_transfer_refuse/);
+# DM: The "domain_renew" is unavaliable due to our account not being "yearly based". Source: [https://epp2-test.rotld.ro/epp/doc/EPP_DOMAIN.pdf - Page 29] - 07/09/2016
+# DM: This is also why no expiry dates are returned for any of our domains - 07/09/2016
+__PACKAGE__->make_exception_for_unavailable_operations(qw/domain_renew domain_delete host_update host_current_status host_check host_exist host_delete host_create host_info contact_delete contact_transfer contact_transfer_stop contact_transfer_query contact_transfer_accept contact_transfer_refuse/);
 
 =pod
 
