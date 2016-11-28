@@ -9,7 +9,7 @@ use Net::DRI::Data::Raw;
 use DateTime;
 use DateTime::Duration;
 
-use Test::More tests => 145;
+use Test::More tests => 146;
 eval { no warnings; require Test::LongString; Test::LongString->import(max => 100); $Test::LongString::Context=50; };
 if ( $@ ) { no strict 'refs'; *{'main::is_string'}=\&main::is; }
 
@@ -871,5 +871,6 @@ is($dri->get_info('totalFreeCount','message',18029364),'25000','poll: fred messa
 is($dri->get_info('usedCount','message',18029364),'1','poll: fred message get_info usedCount');
 is($dri->get_info('price','message',18029364),'0.00','poll: fred message get_info price');
 is($dri->get_info('action','message',18029364),'fred','poll: fred message get_info action');
+is($dri->get_info('content','message',18029364),'<msg><fred:requestFeeInfoData xmlns:fred="http://www.nic.cz/xml/epp/fred-1.5"><fred:periodFrom>2016-10-01T00:00:00+02:00</fred:periodFrom><fred:periodTo>2016-10-17T23:59:59+02:00</fred:periodTo><fred:totalFreeCount>25000</fred:totalFreeCount><fred:usedCount>1</fred:usedCount><fred:price>0.00</fred:price></fred:requestFeeInfoData></msg>','poll: fred message get_info action');
 
 exit 0;
