@@ -9,7 +9,7 @@ use Net::DRI::Data::Raw;
 use DateTime;
 use DateTime::Duration;
 
-use Test::More tests => 135;
+use Test::More tests => 145;
 eval { no warnings; require Test::LongString; Test::LongString->import(max => 100); $Test::LongString::Context=50; };
 if ( $@ ) { no strict 'refs'; *{'main::is_string'}=\&main::is; }
 
@@ -845,5 +845,31 @@ is($dri->get_info('object_type','message',459),'domain','poll: domain transfer o
 is($dri->get_info('object_id','message',459),'test-transfer-dm2.cz','poll: domain transfer out message get_info object_id');
 
 # poll: fred status polls
+$R2 = $E1 . '<response><result code="1301"><msg>Command completed successfully; ack to dequeue</msg></result><msgQ count="7" id="18029364"><qDate>2016-10-18T01:13:08+02:00</qDate><msg><fred:requestFeeInfoData xmlns:fred="http://www.nic.cz/xml/epp/fred-1.5"><fred:periodFrom>2016-10-01T00:00:00+02:00</fred:periodFrom><fred:periodTo>2016-10-17T23:59:59+02:00</fred:periodTo><fred:totalFreeCount>25000</fred:totalFreeCount><fred:usedCount>1</fred:usedCount><fred:price>0.00</fred:price></fred:requestFeeInfoData></msg></msgQ><trID><clTRID>NET-DRI-0.10-TDW-CZ-1989-1477311753908379</clTRID><svTRID>ReqID-2724565996</svTRID></trID></response>' . $E2;
+
+$ok=eval {
+  $rc = $dri->message_retrieve();
+  1;
+};
+
+if (! $ok) {
+  my $err=$@;
+  if (ref $err eq 'Net::DRI::Exception') {
+    die $err->as_string();
+  } else {
+    die $err;
+  }
+}
+
+is($dri->get_info('last_id'),18029364,'poll: fred message get_info last_id 1');
+is($dri->get_info('last_id','message','session'),18029364,'poll: fred message get_info last_id 2');
+is($dri->get_info('id','message',18029364),18029364,'poll: fred message get_info id');
+is($dri->get_info('qdate','message',18029364),'2016-10-18T01:13:08','poll: fred message get_info qdate');
+is($dri->get_info('periodFrom','message',18029364),'2016-10-01T00:00:00+02:00','poll: fred message get_info periodFrom');
+is($dri->get_info('periodTo','message',18029364),'2016-10-17T23:59:59+02:00','poll: fred message get_info periodTo');
+is($dri->get_info('totalFreeCount','message',18029364),'25000','poll: fred message get_info totalFreeCount');
+is($dri->get_info('usedCount','message',18029364),'1','poll: fred message get_info usedCount');
+is($dri->get_info('price','message',18029364),'0.00','poll: fred message get_info price');
+is($dri->get_info('action','message',18029364),'fred','poll: fred message get_info action');
 
 exit 0;

@@ -68,8 +68,8 @@ sub parse_poll {
 
   my $mes=$po->message();
   return unless $mes->is_success();
-
   my $msgid=$mes->msg_id();
+
   my $msg_content = $mes->node_msg();
   return unless ((defined($msgid) && $msgid) && (defined($msg_content) && $msg_content));
 
@@ -79,7 +79,12 @@ sub parse_poll {
   my @res_children = Net::DRI::Util::xml_list_children($msg_content);
   foreach my $el(@res_children) {
     my ($n,$c)=@$el;
-    if ($n eq 'trnData') {
+    # poll specific modifications
+    if ($n eq 'requestFeeInfoData') {
+      $rinfo->{$otype}->{$oname}->{action} = 'fred';
+    }
+    # get all poll information
+    if ($n) {
       my @trnData = Net::DRI::Util::xml_list_children($c);
       foreach my $el(@trnData) {
         my ($n,$c)=@$el;
