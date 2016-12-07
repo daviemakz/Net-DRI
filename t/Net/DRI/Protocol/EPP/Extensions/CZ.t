@@ -9,7 +9,7 @@ use Net::DRI::Data::Raw;
 use DateTime;
 use DateTime::Duration;
 
-use Test::More tests => 178;
+use Test::More tests => 182;
 eval { no warnings; require Test::LongString; Test::LongString->import(max => 100); $Test::LongString::Context=50; };
 if ( $@ ) { no strict 'refs'; *{'main::is_string'}=\&main::is; }
 
@@ -869,6 +869,7 @@ is($dri->get_info('last_id','message','session'),460,'poll: domain expiring soon
 is($dri->get_info('id','message',460),460,'poll: domain expiring soon message get_info id');
 is($dri->get_info('qdate','message',460),'2016-11-14T13:20:37','poll: domain expiring soon message get_info qdate');
 is($dri->get_info('name','message',460),'test-transfer-dm2.cz','poll: domain expiring soon message get_info name');
+is($dri->get_info('exDate','message',460),'2016-11-14','poll: domain expiring soon message get_info exDate');
 is($dri->get_info('action','message',460),'domain-soon-expire','poll: domain expiring soon message get_info action');
 is($dri->get_info('object_type','message',460),'domain','poll: domain expiring soon message get_info object_type');
 is($dri->get_info('object_id','message',460),'test-transfer-dm2.cz','poll: domain expiring soon message get_info object_id');
@@ -896,6 +897,7 @@ is($dri->get_info('last_id','message','session'),461,'poll: domain expired messa
 is($dri->get_info('id','message',461),461,'poll: domain expired message get_info id');
 is($dri->get_info('qdate','message',461),'2016-11-14T13:20:37','poll: domain expired message get_info qdate');
 is($dri->get_info('name','message',461),'test-transfer-dm2.cz','poll: domain expired message get_info name');
+is($dri->get_info('exDate','message',461),'2016-11-14','poll: domain expired message get_info exDate');
 is($dri->get_info('action','message',461),'domain-expired','poll: domain expired message get_info action');
 is($dri->get_info('object_type','message',461),'domain','poll: domain expired message get_info object_type');
 is($dri->get_info('object_id','message',461),'test-transfer-dm2.cz','poll: domain expired message get_info object_id');
@@ -923,6 +925,7 @@ is($dri->get_info('last_id','message','session'),462,'poll: domain removed_from_
 is($dri->get_info('id','message',462),462,'poll: domain removed_from_zone message get_info id');
 is($dri->get_info('qdate','message',462),'2016-11-14T13:20:37','poll: domain removed_from_zone message get_info qdate');
 is($dri->get_info('name','message',462),'test-transfer-dm2.cz','poll: domain removed_from_zone message get_info name');
+is($dri->get_info('exDate','message',462),'2016-11-14','poll: domain removed_from_zone message get_info exDate');
 is($dri->get_info('action','message',462),'info','poll: domain removed_from_zone message get_info action');
 is($dri->get_info('object_type','message',462),'domain','poll: domain removed_from_zone message get_info object_type');
 is($dri->get_info('object_id','message',462),'test-transfer-dm2.cz','poll: domain removed_from_zone message get_info object_id');
@@ -950,6 +953,7 @@ is($dri->get_info('last_id','message','session'),463,'poll: domain deleted messa
 is($dri->get_info('id','message',463),463,'poll: domain deleted message get_info id');
 is($dri->get_info('qdate','message',463),'2016-11-14T13:20:37','poll: domain deleted message get_info qdate');
 is($dri->get_info('name','message',463),'test-transfer-dm2.cz','poll: domain deleted message get_info name');
+is($dri->get_info('exDate','message',463),'2016-11-14','poll: domain deleted message get_info exDate');
 is($dri->get_info('action','message',463),'domain-deleted','poll: domain deleted message get_info action');
 is($dri->get_info('object_type','message',463),'domain','poll: domain deleted message get_info object_type');
 is($dri->get_info('object_id','message',463),'test-transfer-dm2.cz','poll: domain deleted message get_info object_id');
