@@ -9,7 +9,7 @@ use Net::DRI::Data::Raw;
 use DateTime;
 use DateTime::Duration;
 
-use Test::More tests => 146;
+use Test::More tests => 178;
 eval { no warnings; require Test::LongString; Test::LongString->import(max => 100); $Test::LongString::Context=50; };
 if ( $@ ) { no strict 'refs'; *{'main::is_string'}=\&main::is; }
 
@@ -815,7 +815,8 @@ is($R1, '<?xml version="1.0" encoding="UTF-8" standalone="no"?><epp xmlns="urn:i
 ####################################################################################################
 ###### Poll operations
 
-# poll: domain transfer out successfully
+### poll: domain transfer out successfully
+
 $R2 = $E1 . '<response><result code="1301"><msg>Command completed successfully; ack to dequeue</msg></result><msgQ count="1" id="459"><qDate>2016-11-14T13:20:37+01:00</qDate><msg><domain:trnData xmlns:domain="http://www.nic.cz/xml/epp/domain-1.4" xsi:schemaLocation="http://www.nic.cz/xml/epp/domain-1.4 domain-1.4.1.xsd"><domain:name>test-transfer-dm2.cz</domain:name><domain:trDate>2016-11-14</domain:trDate><domain:clID>REG-FRED_A</domain:clID></domain:trnData></msg></msgQ><trID><clTRID>CZ-10342-1479126344353681</clTRID><svTRID>ReqID-0016914507</svTRID></trID></response>' . $E2;
 
 $ok=eval {
@@ -838,11 +839,123 @@ is($dri->get_info('id','message',459),459,'poll: domain transfer out message get
 is($dri->get_info('qdate','message',459),'2016-11-14T13:20:37','poll: domain transfer out message get_info qdate');
 is($dri->get_info('name','message',459),'test-transfer-dm2.cz','poll: domain transfer out message get_info name');
 is($dri->get_info('trDate','message',459),'2016-11-14','poll: domain transfer out message get_info trDate');
-is($dri->get_info('reID','message',459),'REG-FRED_A','poll: domain transfer out message get_info reID');
+is($dri->get_info('clID','message',459),'REG-FRED_A','poll: domain transfer out message get_info clID');
 is($dri->get_info('content','message',459),'<msg><domain:trnData xmlns:domain="http://www.nic.cz/xml/epp/domain-1.4" xsi:schemaLocation="http://www.nic.cz/xml/epp/domain-1.4 domain-1.4.1.xsd"><domain:name>test-transfer-dm2.cz</domain:name><domain:trDate>2016-11-14</domain:trDate><domain:clID>REG-FRED_A</domain:clID></domain:trnData></msg>','poll: domain transfer out message get_info content');
 is($dri->get_info('action','message',459),'transfer','poll: domain transfer out message get_info action');
 is($dri->get_info('object_type','message',459),'domain','poll: domain transfer out message get_info object_type');
 is($dri->get_info('object_id','message',459),'test-transfer-dm2.cz','poll: domain transfer out message get_info object_id');
+
+
+#### poll: domain expiring soon
+
+$R2 = $E1 . '<response><result code="1301"><msg>Command completed successfully; ack to dequeue</msg></result><msgQ count="1" id="460"><qDate>2016-11-14T13:20:37+01:00</qDate><msg><domain:impendingExpData xmlns:domain="http://www.nic.cz/xml/epp/domain-1.4" xsi:schemaLocation="http://www.nic.cz/xml/epp/domain-1.4 domain-1.4.1.xsd"><domain:name>test-transfer-dm2.cz</domain:name><domain:exDate>2016-11-14</domain:exDate></domain:impendingExpData></msg></msgQ><trID><clTRID>CZ-10342-1479126344353681</clTRID><svTRID>ReqID-0016914507</svTRID></trID></response>' . $E2;
+
+$ok=eval {
+  $rc = $dri->message_retrieve();
+  1;
+};
+
+if (! $ok) {
+  my $err=$@;
+  if (ref $err eq 'Net::DRI::Exception') {
+    die $err->as_string();
+  } else {
+    die $err;
+  }
+}
+
+is($dri->get_info('last_id'),460,'poll: domain expiring soon message get_info last_id 1');
+is($dri->get_info('last_id','message','session'),460,'poll: domain expiring soon message get_info last_id 2');
+is($dri->get_info('id','message',460),460,'poll: domain expiring soon message get_info id');
+is($dri->get_info('qdate','message',460),'2016-11-14T13:20:37','poll: domain expiring soon message get_info qdate');
+is($dri->get_info('name','message',460),'test-transfer-dm2.cz','poll: domain expiring soon message get_info name');
+is($dri->get_info('action','message',460),'domain-soon-expire','poll: domain expiring soon message get_info action');
+is($dri->get_info('object_type','message',460),'domain','poll: domain expiring soon message get_info object_type');
+is($dri->get_info('object_id','message',460),'test-transfer-dm2.cz','poll: domain expiring soon message get_info object_id');
+
+#### poll: domain expired
+
+$R2 = $E1 . '<response><result code="1301"><msg>Command completed successfully; ack to dequeue</msg></result><msgQ count="1" id="461"><qDate>2016-11-14T13:20:37+01:00</qDate><msg><domain:expData xmlns:domain="http://www.nic.cz/xml/epp/domain-1.4" xsi:schemaLocation="http://www.nic.cz/xml/epp/domain-1.4 domain-1.4.1.xsd"><domain:name>test-transfer-dm2.cz</domain:name><domain:exDate>2016-11-14</domain:exDate></domain:expData></msg></msgQ><trID><clTRID>CZ-10342-1479126344353681</clTRID><svTRID>ReqID-0016914507</svTRID></trID></response>' . $E2;
+
+$ok=eval {
+  $rc = $dri->message_retrieve();
+  1;
+};
+
+if (! $ok) {
+  my $err=$@;
+  if (ref $err eq 'Net::DRI::Exception') {
+    die $err->as_string();
+  } else {
+    die $err;
+  }
+}
+
+is($dri->get_info('last_id'),461,'poll: domain expired message get_info last_id 1');
+is($dri->get_info('last_id','message','session'),461,'poll: domain expired message get_info last_id 2');
+is($dri->get_info('id','message',461),461,'poll: domain expired message get_info id');
+is($dri->get_info('qdate','message',461),'2016-11-14T13:20:37','poll: domain expired message get_info qdate');
+is($dri->get_info('name','message',461),'test-transfer-dm2.cz','poll: domain expired message get_info name');
+is($dri->get_info('action','message',461),'domain-expired','poll: domain expired message get_info action');
+is($dri->get_info('object_type','message',461),'domain','poll: domain expired message get_info object_type');
+is($dri->get_info('object_id','message',461),'test-transfer-dm2.cz','poll: domain expired message get_info object_id');
+
+#### poll: domain removed from dns zone
+
+$R2 = $E1 . '<response><result code="1301"><msg>Command completed successfully; ack to dequeue</msg></result><msgQ count="1" id="462"><qDate>2016-11-14T13:20:37+01:00</qDate><msg><domain:dnsOutageData xmlns:domain="http://www.nic.cz/xml/epp/domain-1.4" xsi:schemaLocation="http://www.nic.cz/xml/epp/domain-1.4 domain-1.4.1.xsd"><domain:name>test-transfer-dm2.cz</domain:name><domain:exDate>2016-11-14</domain:exDate></domain:dnsOutageData></msg></msgQ><trID><clTRID>CZ-10342-1479126344353681</clTRID><svTRID>ReqID-0016914507</svTRID></trID></response>' . $E2;
+
+$ok=eval {
+  $rc = $dri->message_retrieve();
+  1;
+};
+
+if (! $ok) {
+  my $err=$@;
+  if (ref $err eq 'Net::DRI::Exception') {
+    die $err->as_string();
+  } else {
+    die $err;
+  }
+}
+
+is($dri->get_info('last_id'),462,'poll: domain removed_from_zone message get_info last_id 1');
+is($dri->get_info('last_id','message','session'),462,'poll: domain removed_from_zone message get_info last_id 2');
+is($dri->get_info('id','message',462),462,'poll: domain removed_from_zone message get_info id');
+is($dri->get_info('qdate','message',462),'2016-11-14T13:20:37','poll: domain removed_from_zone message get_info qdate');
+is($dri->get_info('name','message',462),'test-transfer-dm2.cz','poll: domain removed_from_zone message get_info name');
+is($dri->get_info('action','message',462),'info','poll: domain removed_from_zone message get_info action');
+is($dri->get_info('object_type','message',462),'domain','poll: domain removed_from_zone message get_info object_type');
+is($dri->get_info('object_id','message',462),'test-transfer-dm2.cz','poll: domain removed_from_zone message get_info object_id');
+
+#### poll: domain deleted
+
+$R2 = $E1 . '<response><result code="1301"><msg>Command completed successfully; ack to dequeue</msg></result><msgQ count="1" id="463"><qDate>2016-11-14T13:20:37+01:00</qDate><msg><domain:delData xmlns:domain="http://www.nic.cz/xml/epp/domain-1.4" xsi:schemaLocation="http://www.nic.cz/xml/epp/domain-1.4 domain-1.4.1.xsd"><domain:name>test-transfer-dm2.cz</domain:name><domain:exDate>2016-11-14</domain:exDate></domain:delData></msg></msgQ><trID><clTRID>CZ-10342-1479126344353681</clTRID><svTRID>ReqID-0016914507</svTRID></trID></response>' . $E2;
+
+$ok=eval {
+  $rc = $dri->message_retrieve();
+  1;
+};
+
+if (! $ok) {
+  my $err=$@;
+  if (ref $err eq 'Net::DRI::Exception') {
+    die $err->as_string();
+  } else {
+    die $err;
+  }
+}
+
+is($dri->get_info('last_id'),463,'poll: domain deleted message get_info last_id 1');
+is($dri->get_info('last_id','message','session'),463,'poll: domain deleted message get_info last_id 2');
+is($dri->get_info('id','message',463),463,'poll: domain deleted message get_info id');
+is($dri->get_info('qdate','message',463),'2016-11-14T13:20:37','poll: domain deleted message get_info qdate');
+is($dri->get_info('name','message',463),'test-transfer-dm2.cz','poll: domain deleted message get_info name');
+is($dri->get_info('action','message',463),'domain-deleted','poll: domain deleted message get_info action');
+is($dri->get_info('object_type','message',463),'domain','poll: domain deleted message get_info object_type');
+is($dri->get_info('object_id','message',463),'test-transfer-dm2.cz','poll: domain deleted message get_info object_id');
+
+####################################################################################################
+###### Poll operations [fred]
 
 # poll: fred status polls
 $R2 = $E1 . '<response><result code="1301"><msg>Command completed successfully; ack to dequeue</msg></result><msgQ count="7" id="18029364"><qDate>2016-10-18T01:13:08+02:00</qDate><msg><fred:requestFeeInfoData xmlns:fred="http://www.nic.cz/xml/epp/fred-1.5"><fred:periodFrom>2016-10-01T00:00:00+02:00</fred:periodFrom><fred:periodTo>2016-10-17T23:59:59+02:00</fred:periodTo><fred:totalFreeCount>25000</fred:totalFreeCount><fred:usedCount>1</fred:usedCount><fred:price>0.00</fred:price></fred:requestFeeInfoData></msg></msgQ><trID><clTRID>NET-DRI-0.10-TDW-CZ-1989-1477311753908379</clTRID><svTRID>ReqID-2724565996</svTRID></trID></response>' . $E2;
@@ -870,7 +983,7 @@ is($dri->get_info('periodTo','message',18029364),'2016-10-17T23:59:59+02:00','po
 is($dri->get_info('totalFreeCount','message',18029364),'25000','poll: fred message get_info totalFreeCount');
 is($dri->get_info('usedCount','message',18029364),'1','poll: fred message get_info usedCount');
 is($dri->get_info('price','message',18029364),'0.00','poll: fred message get_info price');
-is($dri->get_info('action','message',18029364),'fred','poll: fred message get_info action');
-is($dri->get_info('content','message',18029364),'<msg><fred:requestFeeInfoData xmlns:fred="http://www.nic.cz/xml/epp/fred-1.5"><fred:periodFrom>2016-10-01T00:00:00+02:00</fred:periodFrom><fred:periodTo>2016-10-17T23:59:59+02:00</fred:periodTo><fred:totalFreeCount>25000</fred:totalFreeCount><fred:usedCount>1</fred:usedCount><fred:price>0.00</fred:price></fred:requestFeeInfoData></msg>','poll: fred message get_info action');
+is($dri->get_info('action','message',18029364),'info','poll: fred message get_info action');
+is($dri->get_info('content','message',18029364),'<msg><fred:requestFeeInfoData xmlns:fred="http://www.nic.cz/xml/epp/fred-1.5"><fred:periodFrom>2016-10-01T00:00:00+02:00</fred:periodFrom><fred:periodTo>2016-10-17T23:59:59+02:00</fred:periodTo><fred:totalFreeCount>25000</fred:totalFreeCount><fred:usedCount>1</fred:usedCount><fred:price>0.00</fred:price></fred:requestFeeInfoData></msg>','poll: fred message get_info content');
 
 exit 0;
