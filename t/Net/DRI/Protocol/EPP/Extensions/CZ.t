@@ -990,4 +990,33 @@ is($dri->get_info('price','message',18029364),'0.00','poll: fred message get_inf
 is($dri->get_info('action','message',18029364),'info','poll: fred message get_info action');
 is($dri->get_info('content','message',18029364),'<msg><fred:requestFeeInfoData xmlns:fred="http://www.nic.cz/xml/epp/fred-1.5"><fred:periodFrom>2016-10-01T00:00:00+02:00</fred:periodFrom><fred:periodTo>2016-10-17T23:59:59+02:00</fred:periodTo><fred:totalFreeCount>25000</fred:totalFreeCount><fred:usedCount>1</fred:usedCount><fred:price>0.00</fred:price></fred:requestFeeInfoData></msg>','poll: fred message get_info content');
 
+# poll: fred status poll (alternate)
+$R2 = $E1 . '<response><result code="1301"><msg>Command completed successfully; ack to dequeue</msg></result><msgQ count="7" id="18326285"><qDate>2016-12-13T01:14:23+01:00</qDate><msg><fred:requestFeeInfoData xmlns:fred="http://www.nic.cz/xml/epp/fred-1.5"><fred:periodFrom>2016-12-01T00:00:00+01:00</fred:periodFrom><fred:periodTo>2016-12-12T23:59:59+01:00</fred:periodTo><fred:totalFreeCount>25000</fred:totalFreeCount><fred:usedCount>287</fred:usedCount><fred:price>0.00</fred:price></fred:requestFeeInfoData></msg></msgQ><trID><clTRID>NET-DRI-0.10-TDW-CZ-24841-1482148693552998</clTRID><svTRID>ReqID-2810737800</svTRID></trID></response>' . $E2;
+
+$ok=eval {
+  $rc = $dri->message_retrieve();
+  1;
+};
+
+if (! $ok) {
+  my $err=$@;
+  if (ref $err eq 'Net::DRI::Exception') {
+    die $err->as_string();
+  } else {
+    die $err;
+  }
+}
+
+is($dri->get_info('last_id'),18326285,'poll: fred message alternate get_info last_id 1');
+is($dri->get_info('last_id','message','session'),18326285,'poll: fred message alternate get_info last_id 2');
+is($dri->get_info('id','message',18326285),18326285,'poll: fred message alternate get_info id');
+is($dri->get_info('qdate','message',18326285),'2016-12-13T01:14:23','poll: fred message alternate get_info qdate');
+is($dri->get_info('periodFrom','message',18326285),'2016-12-01T00:00:00+01:00','poll: fred message alternate get_info periodFrom');
+is($dri->get_info('periodTo','message',18326285),'2016-12-12T23:59:59+01:00','poll: fred message alternate get_info periodTo');
+is($dri->get_info('totalFreeCount','message',18326285),'25000','poll: fred message alternate get_info totalFreeCount');
+is($dri->get_info('usedCount','message',18326285),'287','poll: fred message alternate get_info usedCount');
+is($dri->get_info('price','message',18326285),'0.00','poll: fred message alternate get_info price');
+is($dri->get_info('action','message',18326285),'info','poll: fred message alternate get_info action');
+is($dri->get_info('content','message',18326285),'<msg><fred:requestFeeInfoData xmlns:fred="http://www.nic.cz/xml/epp/fred-1.5"><fred:periodFrom>2016-12-01T00:00:00+01:00</fred:periodFrom><fred:periodTo>2016-12-12T23:59:59+01:00</fred:periodTo><fred:totalFreeCount>25000</fred:totalFreeCount><fred:usedCount>287</fred:usedCount><fred:price>0.00</fred:price></fred:requestFeeInfoData></msg>','poll: fred message alternate get_info content');
+
 exit 0;
