@@ -277,7 +277,7 @@ Afilias has extended the .INFO plaform to include these newGTLDs
 
  $dri->add_registry('NGTLD',{provider=>'afilias'}); # own tlds
 
-info mobi pro xn--5tzm5g xn--6frz82g bet black blue green kim lgbt lotto meet organic pet pink poker promo red shiksha vote voto
+info mobi pro xn--5tzm5g xn--6frz82g archi bet bio black blue green kim lgbt lotto meet organic pet pink poker promo red shiksha ski vote voto
 
 Contended TLD's not included
 
@@ -286,7 +286,7 @@ Contended TLD's not included
  return {
      bep_type => 2, # shared registry
      tlds => ['info','mobi','pro','law.pro','jur.pro','bar.pro','med.pro','cpa.pro','aca.pro','eng.pro',
-              'xn--5tzm5g', 'xn--6frz82g','bet','black','blue','green','kim','lgbt','lotto','meet','organic','pet','pink','poker','promo','red','shiksha','vote','voto'],
+              'xn--5tzm5g', 'xn--6frz82g','archi','bet','bio','black','blue','green','kim','lgbt','lotto','meet','organic','pet','pink','poker','promo','red','shiksha','ski','vote','voto'],
      transport_protocol_default => ['Net::DRI::Transport::Socket',{},'Net::DRI::Protocol::EPP::Extensions::AfiliasSRS',{'brown_fee_version' => '0.8'}],
      whois_server => 'whois.afilias.net',
    } if $bep eq 'afilias';
@@ -299,14 +299,14 @@ Afilias SRS has extended the .XXX plaform to include these newGTLDs
 
  $dri->add_registry('NGTLD',{provider=>'afiliassrs'});
 
-ngtlds: xn--4gbrim xn--kput3i adult bnpparibas creditunion ged global indians irish ist istanbul ltda onl porn rich sex srl storage vegas
+ngtlds: xn--4gbrim xn--kput3i adult bnpparibas creditunion eco ged global indians ist istanbul ltda onl porn rich sex srl storage vegas zara
 gtlds: xxx mobi
 cctlds: ag bz gi lc mn me sc vc
 
 =cut
 
  if ($bep eq 'afiliassrs') {
-   my @ngtlds = qw/xn--4gbrim xn--kput3i adult bnpparibas creditunion ged global indians irish ist istanbul ltda onl porn rich sex srl storage vegas/;
+   my @ngtlds = qw/xn--4gbrim xn--kput3i adult bnpparibas creditunion eco ged global indians ist istanbul ltda onl porn rich sex srl storage vegas zara/;
    my @gtlds = qw/xxx mobi/;
    my @cctlds = (
        'ag',(map { $_.'.ag'} qw/co com net nom org/),
@@ -329,33 +329,6 @@ cctlds: ag bz gi lc mn me sc vc
 
 =pod
 
-=head2 Amazon Registry Services, Inc. (provider: Neustar)
-
- $dri->add_registry('NGTLD',{provider=>'amazon'});
-
-=head3 Status: Untested
-
-=head3 TLDs
-
-xn--1ck2e1b xn--bck1b9a5dre4c xn--cck2b3b xn--eckvdtc9d xn--fct429k xn--gckr3f0f xn--jvr189m xn--rovu88b author aws book bot buy call circle fast got imdb jot joy like moi pin prime read room safe smile song spot talk tunes tushu wanggou yamaxun you zappos zero
-
-=head3 Custom extensions
-
-L<Net::DRI::Protocol::EPP::Extensions::CentralNic::Fee> urn:centralnic:params:xml:ns:fee-0.6
-
-=cut
-
- return {
-     bep_type => 1, # dedicated registry
-     tlds => ['xn--1ck2e1b','xn--bck1b9a5dre4c','xn--cck2b3b','xn--eckvdtc9d','xn--fct429k','xn--gckr3f0f','xn--jvr189m','xn--rovu88b','author','aws','book','bot','buy','call','circle','fast','got','imdb','jot','joy','like','moi','pin','prime','read','room','safe','smile','song','spot','talk','tunes','tushu','wanggou','yamaxun','you','zappos','zero'],
-     transport_protocol_default => ['Net::DRI::Transport::Socket',{},'Net::DRI::Protocol::EPP::Extensions::NEUSTAR',{custom => ['CentralNic::Fee'], 'brown_fee_version' => '0.6' }],
-     whois_server => (defined $tld && $tld =~ m/\w+/ ? 'whois.nic.' . $tld : undef),
-   } if $bep eq 'amazon';
-
-
-
-=pod
-
 =head2 ARI
 
  $dri->add_registry('NGTLD',{provider=>'ari'});
@@ -364,8 +337,7 @@ L<Net::DRI::Protocol::EPP::Extensions::CentralNic::Fee> urn:centralnic:params:xm
 
 =head3 TLDs
 
-xn--kcrx77d1x4a xn--mgba7c0bbn0a xn--ngbc5azd aaa afl americanexpress amex analytics anz athleta banamex bananarepublic barclaycard barclays booking bond boots bridgestone build buzz cancerresearch cartier cba cbn chase chintai chloe citadel citi cloud commbank compare courses cuisinella dell discover doha duns dupont farmers ferrero film firestone flickr ford fox ftr gap giving gucci homegoods homesense honeywell hsbc hyatt ibm icu ieee iinet intel intuit iselect iwc jlc jmp jnj jpmorgan kinder kpmg krd latrobe lilly lincoln luxury marshalls mcd mcdonalds melbourne men menu mint mlb monash montblanc mtn mutual netbank nfl olayan olayangroup oldnavy one open panerai philips physio piaget ping playstation praxi quest qvc rocher sandvik sandvikcoromant sas saxo schmidt scor seek select seven sony starhub statefarm study sucks swiftcover sydney tab tdk teva tjmaxx tjx tkmaxx trust virgin vista vistaprint vivo walter watches weather weatherchannel winners woodside wtc xn--kpu716f xn--pbt977c yahoo yandex zippo
-
+xn--1ck2e1b xn--bck1b9a5dre4c xn--cck2b3b xn--eckvdtc9d xn--fct429k xn--gckr3f0f xn--gk3at1e xn--jvr189m xn--kcrx77d1x4a xn--kpu716f xn--mgba7c0bbn0a xn--ngbc5azd xn--pbt977c xn--rovu88b aaa afl americanexpress amex analytics anz athleta audible author aws banamex bananarepublic barclaycard barclays bond book booking boots bot bridgestone build buy buzz call cancerresearch cartier cba cbn chase chintai chloe circle citadel citi cloud commbank compare coupon courses cuisinella deal dell discover doha duns dupont farmers fast ferrero film fire firestone flickr ford fox free ftr gap giving got gucci homegoods homesense honeywell hot hsbc hyatt ibm icu ieee iinet imdb intel intuit iselect iwc jlc jmp jnj jot joy jpmorgan kinder kindle kpmg krd latrobe like lilly lincoln luxury marshalls mcd mcdonalds melbourne men menu mint mlb moi monash montblanc mtn mutual netbank nfl now olayan olayangroup oldnavy one open panerai pay philips physio piaget pin ping playstation praxi prime quest qvc read rocher room safe sandvik sandvikcoromant sas save saxo schmidt scor secure seek select seven silk smile song sony spot starhub statefarm study sucks swiftcover sydney tab talk tdk teva tjmaxx tjx tkmaxx trust tunes tushu virgin vista vistaprint vivo walter wanggou watches weather weatherchannel winners woodside wow wtc yahoo yamaxun yandex you zappos zero zippo
 Contended TLD's not included
 
 =head3 Custom extensions:
@@ -398,7 +370,7 @@ L<Net::DRI::Protocol::EPP::Extensions::LaunchPhase> urn:ietf:params:xml:ns:launc
 
  return {
      bep_type => 2, # shared registry
-     tlds => ['xn--kcrx77d1x4a', 'xn--mgba7c0bbn0a', 'xn--ngbc5azd', 'aaa', 'afl', 'americanexpress', 'amex', 'analytics', 'anz', 'athleta', 'banamex', 'bananarepublic', 'barclaycard', 'barclays', 'booking', 'bond', 'boots', 'bridgestone', 'build', 'buzz', 'cancerresearch', 'cartier', 'cba', 'cbn', 'chase', 'chintai', 'chloe', 'citadel', 'citi', 'cloud', 'commbank', 'compare', 'courses', 'cuisinella', 'dell', 'discover', 'doha', 'duns', 'dupont', 'farmers', 'ferrero', 'film', 'firestone', 'flickr', 'ford', 'fox', 'ftr', 'gap', 'giving', 'gucci', 'homegoods', 'homesense', 'honeywell', 'hsbc', 'hyatt', 'ibm', 'icu', 'ieee', 'iinet', 'intel', 'intuit', 'iselect', 'iwc', 'jlc', 'jmp', 'jnj', 'jpmorgan', 'kinder', 'kpmg', 'krd', 'latrobe', 'lilly', 'lincoln', 'luxury', 'marshalls', 'mcd', 'mcdonalds', 'melbourne', 'men', 'menu', 'mint', 'mlb', 'monash', 'montblanc', 'mtn', 'mutual', 'netbank', 'nfl', 'olayan', 'olayangroup', 'oldnavy', 'one', 'open', 'panerai', 'philips', 'physio', 'piaget', 'ping', 'playstation', 'praxi', 'quest', 'qvc', 'rocher', 'sandvik', 'sandvikcoromant', 'sas', 'saxo', 'schmidt', 'scor', 'seek', 'select', 'seven', 'sony', 'starhub', 'statefarm', 'study', 'sucks', 'swiftcover', 'sydney', 'tab', 'tdk', 'teva', 'tjmaxx', 'tjx', 'tkmaxx', 'trust', 'virgin', 'vista', 'vistaprint', 'vivo', 'walter', 'watches', 'weather', 'weatherchannel', 'winners', 'woodside', 'wtc', 'xn--kpu716f', 'xn--pbt977c', 'yahoo', 'yandex', 'zippo'],
+     tlds => ['xn--1ck2e1b','xn--bck1b9a5dre4c','xn--cck2b3b','xn--eckvdtc9d','xn--fct429k','xn--gckr3f0f','xn--gk3at1e','xn--jvr189m','xn--kcrx77d1x4a','xn--kpu716f','xn--mgba7c0bbn0a','xn--ngbc5azd','xn--pbt977c','xn--rovu88b','aaa','afl','americanexpress','amex','analytics','anz','athleta','audible','author','aws','banamex','bananarepublic','barclaycard','barclays','bond','book','booking','boots','bot','bridgestone','build','buy','buzz','call','cancerresearch','cartier','cba','cbn','chase','chintai','chloe','circle','citadel','citi','cloud','commbank','compare','coupon','courses','cuisinella','deal','dell','discover','doha','duns','dupont','farmers','fast','ferrero','film','fire','firestone','flickr','ford','fox','free','ftr','gap','giving','got','gucci','homegoods','homesense','honeywell','hot','hsbc','hyatt','ibm','icu','ieee','iinet','imdb','intel','intuit','iselect','iwc','jlc','jmp','jnj','jot','joy','jpmorgan','kinder','kindle','kpmg','krd','latrobe','like','lilly','lincoln','luxury','marshalls','mcd','mcdonalds','melbourne','men','menu','mint','mlb','moi','monash','montblanc','mtn','mutual','netbank','nfl','now','olayan','olayangroup','oldnavy','one','open','panerai','pay','philips','physio','piaget','pin','ping','playstation','praxi','prime','quest','qvc','read','rocher','room','safe','sandvik','sandvikcoromant','sas','save','saxo','schmidt','scor','secure','seek','select','seven','silk','smile','song','sony','spot','starhub','statefarm','study','sucks','swiftcover','sydney','tab','talk','tdk','teva','tjmaxx','tjx','tkmaxx','trust','tunes','tushu','virgin','vista','vistaprint','vivo','walter','wanggou','watches','weather','weatherchannel','winners','woodside','wow','wtc','yahoo','yamaxun','yandex','you','zappos','zero','zippo'],
      transport_protocol_default => ['Net::DRI::Transport::Socket',{},'Net::DRI::Protocol::EPP::Extensions::ARI',{}],
      whois_server => 'whois.aridnrs.net.au',
    } if $bep eq 'ari';
@@ -567,7 +539,7 @@ xn--flw351e xn--q9jyb4c xn--qcka1pmc ads android app boo cal channel chrome dad 
 
 =head3 TLDs
 
-academy accountants agency apartments architect associates bargains bike bingo boutique builders business cab cafe camera camp capital cards care careers cash casino catering center chat cheap church city claims cleaning clinic clothing coach codes coffee community company computer condos construction contractors cool coupons credit creditcard cruises dating deals delivery dental diamonds digital direct directory discount doctor dog domains education email energy engineering enterprises equipment estate events exchange expert exposed express fail farm finance financial fish fitness flights florist football foundation fund furniture fyi gallery gifts gold golf glass gmbh graphics gratis gripe group guide guru healthcare hockey holdings holiday hospital house immo industries institute insure international investments jetzt jewelry kitchen land lease legal life lighting limited limo loans ltd maison management mba marketing media medical memorial money movie network partners parts pets photography photos pictures pizza place plumbing plus productions properties recipes reise reisen rentals repair report restaurant run salon sarl school schule services shoes shopping show singles soccer solar solutions sports style supplies supply support surgery systems tax taxi team technology tennis theater tienda tips tires today tools tours town toys training university vacations ventures viajes villas vin vision voyage watch wine world works wtf xn--czrs0t xn--fjq720a xn--unup4y xn--vhquv zone
+academy accountants agency apartments architect associates bargains bike bingo boutique builders business cab cafe camera camp capital cards care careers cash casino catering center chat cheap church city claims cleaning clinic clothing coach codes coffee community company computer condos construction contractors cool coupons credit creditcard cruises dating deals delivery dental diamonds digital direct directory discount doctor dog domains education email energy engineering enterprises equipment estate events exchange expert exposed express fail farm finance financial fish fitness flights florist football foundation fund furniture fyi gallery gifts gold golf glass gmbh graphics gratis gripe group guide guru healthcare hockey holdings holiday hospital house immo industries institute insure international investments irish jetzt jewelry kitchen land lease legal life lighting limited limo loans ltd maison management mba marketing media medical memorial money movie network partners parts pets photography photos pictures pizza place plumbing plus productions properties recipes reise reisen rentals repair report restaurant run salon sarl school schule services shoes shopping show singles soccer solar solutions sports style supplies supply support surgery systems tax taxi team technology tennis theater tienda tips tires today tools tours town toys training university vacations ventures viajes villas vin vision voyage watch wine world works wtf xn--czrs0t xn--fjq720a xn--unup4y xn--vhquv zone
 
 =head3 Custom extensions
 
@@ -586,7 +558,7 @@ In order to submit DPML blocks OR DMPL Overrides, submit a domain_create with th
 
  return {
      bep_type => 2, # shared registry
-     tlds => ['dpml.zone','academy','accountants','agency','apartments','architect','associates','bargains','bike','bingo','boutique','builders','business','cab','cafe','camera','camp','capital','cards','care','careers','cash','casino','catering','center','chat','cheap','church','city','claims','cleaning','clinic','clothing','coach','codes','coffee','community','company','computer','condos','construction','contractors','cool','coupons','credit','creditcard','cruises','dating','deals','delivery','dental','diamonds','digital','direct','directory','discount','doctor','dog','domains','education','email','energy','engineering','enterprises','equipment','estate','events','exchange','expert','exposed','express','fail','farm','finance','financial','fish','fitness','flights','florist','football','foundation','fund','furniture','fyi','gallery','gifts','gold','golf','glass','gmbh','graphics','gratis','gripe','group','guide','guru','healthcare','hockey','holdings','holiday','hospital','house','immo','industries','institute','insure','international','investments','jetzt','jewelry','kitchen','land','lease','legal','life','lighting','limited','limo','loans','ltd','maison','management','mba','marketing','media','medical','memorial','money','movie','network','partners','parts','pets','photography','photos','pictures','pizza','place','plumbing','plus','productions','properties','recipes','reise','reisen','rentals','repair','report','restaurant','run','salon','sarl','school','schule','services','shoes','shopping','show','singles','soccer','solar','solutions','sports','style','supplies','supply','support','surgery','systems','tax','taxi','team','technology','tennis','theater','tienda','tips','tires','today','tools','tours','town','toys','training','university','vacations','ventures','viajes','villas','vin','vision','voyage','watch','wine','world','works','wtf','xn--czrs0t','xn--fjq720a','xn--unup4y','xn--vhquv','zone'],
+     tlds => ['dpml.zone','academy','accountants','agency','apartments','architect','associates','bargains','bike','bingo','boutique','builders','business','cab','cafe','camera','camp','capital','cards','care','careers','cash','casino','catering','center','chat','cheap','church','city','claims','cleaning','clinic','clothing','coach','codes','coffee','community','company','computer','condos','construction','contractors','cool','coupons','credit','creditcard','cruises','dating','deals','delivery','dental','diamonds','digital','direct','directory','discount','doctor','dog','domains','education','email','energy','engineering','enterprises','equipment','estate','events','exchange','expert','exposed','express','fail','farm','finance','financial','fish','fitness','flights','florist','football','foundation','fund','furniture','fyi','gallery','gifts','gold','golf','glass','gmbh','graphics','gratis','gripe','group','guide','guru','healthcare','hockey','holdings','holiday','hospital','house','immo','industries','institute','insure','international','investments','irish','jetzt','jewelry','kitchen','land','lease','legal','life','lighting','limited','limo','loans','ltd','maison','management','mba','marketing','media','medical','memorial','money','movie','network','partners','parts','pets','photography','photos','pictures','pizza','place','plumbing','plus','productions','properties','recipes','reise','reisen','rentals','repair','report','restaurant','run','salon','sarl','school','schule','services','shoes','shopping','show','singles','soccer','solar','solutions','sports','style','supplies','supply','support','surgery','systems','tax','taxi','team','technology','tennis','theater','tienda','tips','tires','today','tools','tours','town','toys','training','university','vacations','ventures','viajes','villas','vin','vision','voyage','watch','wine','world','works','wtf','xn--czrs0t','xn--fjq720a','xn--unup4y','xn--vhquv','zone'],
      transport_protocol_default => ['Net::DRI::Transport::Socket',{'ssl_version'=>'TLSv12'},'Net::DRI::Protocol::EPP::Extensions::UNITEDTLD',{}],
      whois_server => 'whois.donuts.co',
      check_limit => 5,
@@ -790,13 +762,13 @@ M&M uses a shared enveronment for its own TLDs (set provider to 'mam' or 'mamown
 
 Uncontested: budapest luxe xn--g2xx48c
 
-Contested: aby beauty coupon cpa data dds eco gay home hotel inc latino llc realestate
+Contested: aby beauty coupon cpa data dds gay home hotel inc latino llc realestate
 =cut
 
  return {
      bep_type => 2, # shared registry
      tlds => ['budapest', 'luxe', 'xn--g2xx48c',
-              'baby', 'beauty', 'coupon', 'cpa', 'data', 'dds', 'eco', 'gay', 'home', 'hotel', 'inc', 'latino','llc', 'realestate'
+              'baby', 'beauty', 'coupon', 'cpa', 'data', 'dds', 'gay', 'home', 'hotel', 'inc', 'latino','llc', 'realestate'
              ],
      transport_protocol_default => ['Net::DRI::Transport::Socket',{},'Net::DRI::Protocol::EPP::Extensions::NEWGTLD',{custom=>['CentralNic::Fee']}],
      whois_server => 'whois-dub.mm-registry.com',
@@ -1154,34 +1126,6 @@ L<NET::DRI::Protocol::EPP::Extensions::MX::IDN>
      contact_i18n => 1,
      whois_server => (defined $tld && $tld =~ m/\w+/ ? 'whois.nic.' . $tld : undef),
    } if $bep eq 'nicmx';
-
-=pod
-
-
-=head2 StartingDot (Provided by Key Sytems)
-
- $dri->add_registry('NGTLD',{provider=>'startingdot'});
-
-=head3 Status: Working
-
-=head3 TLDs
-
-archi bio ski
-
-=head3 Custom extensions
-
-L<Net::DRI::Protocol::EPP::Extensions::CentralNic::Fee> urn:centralnic:params:xml:ns:fee-0.7
-
-=cut
-
- return {
-     bep_type => 2, # shared registry
-     tlds => ['archi', 'bio', 'ski'],
-     transport_protocol_default => ['Net::DRI::Transport::Socket',{},'Net::DRI::Protocol::EPP::Extensions::NEWGTLD',{custom => ['CentralNic::Fee'], 'brown_fee_version' => '0.7' }],
-     contact_i18n => 1,
-     whois_server => (defined $tld && $tld =~ m/\w+/ ? 'whois.nic.' . $tld : undef),
-   } if $bep eq 'startingdot';
-
 
 =pod
 
